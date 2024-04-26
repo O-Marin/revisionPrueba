@@ -29,4 +29,13 @@ const getSkatersQuery = async()=>{
     }
 }
 
-export {addSkaterQuery, getSkatersQuery};
+const getSkaterQuery = async(email,password)=>{
+    const getSkater = {
+        text:`SELECT * FROM skaters WHERE email = '${email}' AND password = '${password}'`,
+        values:[email, password],
+    }
+    const result = await pool.query(getSkater);
+    return result.rows;
+}
+
+export {addSkaterQuery, getSkatersQuery, getSkaterQuery};

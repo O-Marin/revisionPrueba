@@ -1,5 +1,6 @@
 import path from 'path';
-import {addSkaterQuery,getSkatersQuery} from '../queries/consultaSkater.js';
+import {addSkaterQuery,getSkatersQuery, getSkaterQuery} from '../queries/consultaSkater.js';
+import jwt from 'jsonwebtoken';
 const __dirname = path.resolve();
 
 const addSkaterControl = async (req,res)=>{
@@ -27,4 +28,19 @@ const getSkaterControl = async (req,res)=>{
     
 }
 
-export {addSkaterControl, getSkaterControl};
+const getLoginControl = async(req,res)=>{
+    try {
+        const {email,password} = req.body;
+    const result = await getSkaterQuery(email,password);
+    //token
+    const secretKey = process.env.SECRET_KEY;
+    const token = jwt.sign(result, secretKey);
+    console.log(token)
+    res.status(200).send(token);
+    } catch (error) {
+        res.status(500).send('algo salio mal ' + error.message)
+    }
+    
+}
+
+export {addSkaterControl, getSkaterControl,getLoginControl};
